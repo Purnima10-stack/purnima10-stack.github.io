@@ -375,7 +375,7 @@
     }
 
     /* ── SCROLL REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* ── RESPONSIVE ── */
@@ -755,14 +755,16 @@
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((e, i) => {
+      entries.forEach((e) => {
         if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          e.target.classList.add('visible');
           observer.unobserve(e.target);
         }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => observer.observe(el));
+    // Fallback: make all reveals visible after 1s in case observer fails
+    setTimeout(() => { reveals.forEach(el => el.classList.add('visible')); }, 1000);
 
     // Smooth active nav link
     const sections = document.querySelectorAll('section[id]');
